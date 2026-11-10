@@ -15,8 +15,20 @@ jobs:
           node-version: 20
       - run: git clone --depth 1 -b master https://github.com/iptv-org/epg.git tool
       - run: cd tool && npm install
-      - run: cd tool && npm run grab --- --sites=movistarplus.es --output=../guide.xml
-      - run: |
+      - name: Generate channels list and guide
+        run: |
+          cd tool
+          {
+            echo '<?xml version="1.0" encoding="UTF-8"?>'
+            echo '<channels>'
+            for f in sites/mi.tv/mi.tv_co.channels.xml sites/mi.tv/mi.tv_mx.channels.xml sites/mi.tv/mi.tv_ar.channels.xml; do
+              grep '<channel ' "$f" || true
+            done
+            echo '</channels>'
+          } > ../channels.xml
+          npm run grab --- --channels=../channels.xml --output=../guide.xml
+      - name: Commit guide
+        run: |
           git config user.name "epg-bot"
           git config user.email "epg-bot@users.noreply.github.com"
           git add guide.xml
