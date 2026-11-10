@@ -15,7 +15,7 @@ jobs:
           node-version: 20
       - run: git clone --depth 1 -b master https://github.com/iptv-org/epg.git tool
       - run: cd tool && npm install
-      - run: cd tool && npm run grab --- --sites=directv.com.ar --output=../guide.xml
+      - run: cd tool && npm run grab --- --sites=movistarplus.es --output=../guide.xml
       - run: |
           git config user.name "epg-bot"
           git config user.email "epg-bot@users.noreply.github.com"
